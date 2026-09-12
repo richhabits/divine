@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { LivePlayer } from "@/components/LivePlayer";
 import { ScheduleGrid } from "@/components/ScheduleGrid";
+import { SocialFeed } from "@/components/SocialFeed";
 import { NowPlaying } from "@/lib/types";
 
 const NOW_PLAYING: NowPlaying = {
@@ -84,24 +85,39 @@ export default function HomePage() {
           {/* Main heading */}
           <motion.h1
             variants={stagger.item}
-            className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] mb-4"
+            className="text-6xl sm:text-8xl md:text-9xl lg:text-[11rem] font-black tracking-tighter leading-[0.8] mb-6 relative z-10 mix-blend-difference"
           >
-            <span className="block text-white">THE HIGHER STATE</span>
-            <span className="block text-gradient-gold">OF AUDIO.</span>
+            <span className="block text-white opacity-90 drop-shadow-2xl hover:text-brand-gold transition-colors duration-700 cursor-default">
+              THE HIGHER
+            </span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-[#E8D48B] to-brand-gold -mt-2 md:-mt-6">
+              STATE.
+            </span>
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p
             variants={stagger.item}
-            className="text-sm md:text-base text-white/30 tracking-[0.15em] uppercase mt-6 max-w-xl mx-auto"
+            className="text-xs md:text-sm text-white/50 tracking-[0.3em] uppercase mt-12 max-w-2xl mx-auto border-l-2 border-brand-gold pl-4 text-left"
           >
-            Multi-channel broadcasting &middot; Soulful House &middot; Garage
-            &middot; Jungle &middot; D&amp;B &middot; Afrobeats
+            London's premier DAB digital broadcast network.<br/>
+            Soulful House &middot; Garage &middot; Jungle &middot; D&amp;B
           </motion.p>
         </motion.div>
 
         {/* ── Live Player (Phase 1 centrepiece) ──────── */}
-        <LivePlayer nowPlaying={NOW_PLAYING} />
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, rotateX: 10 }}
+          animate={{ opacity: 1, scale: 1, rotateX: 0 }}
+          transition={{ duration: 1, delay: 0.6, type: "spring", damping: 20 }}
+          className="relative w-full max-w-xl mx-auto perspective-1000 z-20"
+        >
+          {/* Decorative glow behind player */}
+          <div className="absolute inset-0 bg-brand-gold/20 blur-[100px] rounded-full scale-110 -z-10" />
+          <div className="transform-gpu hover:scale-[1.02] hover:-rotate-1 transition-all duration-500">
+            <LivePlayer nowPlaying={NOW_PLAYING} />
+          </div>
+        </motion.div>
 
         {/* ── Scroll indicator ───────────────────────── */}
         <motion.div
@@ -122,11 +138,42 @@ export default function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════════════════
-          SECTION C: Schedule Grid (Phase 2)
+          SECTION B.5: Running Ticker Marquee
+          ═══════════════════════════════════════════════════ */}
+      <div className="relative z-10 w-full overflow-hidden bg-brand-gold py-3 md:py-4 -rotate-1 scale-105 my-12 shadow-[0_0_50px_rgba(201,168,76,0.3)]">
+        <motion.div
+          animate={{ x: [0, -1000] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="whitespace-nowrap flex items-center"
+        >
+          {[...Array(6)].map((_, i) => (
+            <span key={i} className="text-black font-black tracking-widest text-sm md:text-lg uppercase mx-6 flex items-center gap-6">
+              LONDON'S PREMIER DAB BROADCAST
+              <span className="w-2 h-2 rounded-full bg-black/30" />
+              SOULFUL HOUSE
+              <span className="w-2 h-2 rounded-full bg-black/30" />
+              GARAGE
+              <span className="w-2 h-2 rounded-full bg-black/30" />
+              JUNGLE
+              <span className="w-2 h-2 rounded-full bg-black/30" />
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════
+          SECTION C: Schedule Grid
           ═══════════════════════════════════════════════════ */}
       <section id="schedule" className="relative z-10">
         <ScheduleGrid />
       </section>
+
+      {/* ═══════════════════════════════════════════════════
+          SECTION C.5: Social Feed
+          ═══════════════════════════════════════════════════ */}
+      <div className="relative z-10 border-t border-white/5 bg-zinc-950/50">
+        <SocialFeed />
+      </div>
 
       {/* ═══════════════════════════════════════════════════
           SECTION D: CTA Footer
