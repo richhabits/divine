@@ -2,7 +2,7 @@
 
 import { useSession, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
-import { LogOut, Music, Radio, Settings } from "lucide-react";
+import { LogOut, Music, Radio } from "lucide-react";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 

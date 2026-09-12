@@ -100,7 +100,7 @@ export default function HomePage() {
             variants={stagger.item}
             className="text-xs md:text-sm text-white/50 tracking-[0.3em] uppercase mt-12 max-w-2xl mx-auto border-l-2 border-brand-gold pl-4 text-left"
           >
-            London's premier DAB digital broadcast network.<br/>
+            London&apos;s premier DAB digital broadcast network.<br/>
             Soulful House &middot; Garage &middot; Jungle &middot; D&amp;B
           </motion.p>
         </motion.div>
@@ -148,7 +148,7 @@ export default function HomePage() {
         >
           {[...Array(6)].map((_, i) => (
             <span key={i} className="text-black font-black tracking-widest text-sm md:text-lg uppercase mx-6 flex items-center gap-6">
-              LONDON'S PREMIER DAB BROADCAST
+              LONDON&apos;S PREMIER DAB BROADCAST
               <span className="w-2 h-2 rounded-full bg-black/30" />
               SOULFUL HOUSE
               <span className="w-2 h-2 rounded-full bg-black/30" />

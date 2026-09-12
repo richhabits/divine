@@ -85,6 +85,7 @@ export function ScheduleGrid() {
 
   // Update active day on mount (client-side only)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveDay(getCurrentDay());
   }, []);
 

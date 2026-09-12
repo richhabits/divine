@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Instagram, PlaySquare } from "lucide-react"; // PlaySquare as TikTok fallback
+import { Camera, PlaySquare } from "lucide-react"; // PlaySquare as TikTok fallback
 
 export function SocialFeed() {
   const posts = [
@@ -38,7 +38,7 @@ export function SocialFeed() {
         </div>
         <div className="hidden sm:flex gap-4">
           <button className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-gold hover:text-black hover:border-brand-gold transition-colors">
-            <Instagram className="w-4 h-4" />
+            <Camera className="w-4 h-4" />
           </button>
           <button className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-brand-gold hover:text-black hover:border-brand-gold transition-colors">
             <PlaySquare className="w-4 h-4" />
@@ -66,7 +66,7 @@ export function SocialFeed() {
             
             <div className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center border border-white/10">
               {post.platform === "instagram" ? (
-                <Instagram className="w-4 h-4 text-white" />
+                <Camera className="w-4 h-4 text-white" />
               ) : (
                 <PlaySquare className="w-4 h-4 text-white" />
               )}
