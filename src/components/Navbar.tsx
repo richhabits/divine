@@ -13,8 +13,8 @@ const NAV_LINKS: NavLink[] = [
 ];
 
 const SECONDARY_LINKS = [
-  { label: "SCHEDULE", href: "#schedule" },
-  { label: "RESIDENTS", href: "#residents" },
+  { label: "SCHEDULE", href: "/#schedule" },
+  { label: "RESIDENTS", href: "/residents" },
   { label: "EVENTS", href: "/events" },
   { label: "MERCH", href: "/merch" },
   { label: "LISTEN BACK", href: "/listen-back" },
