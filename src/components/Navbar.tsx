@@ -6,15 +6,18 @@ import { Menu, X, Radio } from "lucide-react";
 import { NavLink } from "@/lib/types";
 
 const NAV_LINKS: NavLink[] = [
-  { label: "DIVINE:ONE", href: "#", channel: "DIVINE:ONE" },
-  { label: "DIVINE:SUB", href: "#sub", channel: "DIVINE:SUB" },
-  { label: "DIVINE:CHILL", href: "#chill", channel: "DIVINE:CHILL" },
-  { label: "DIVINE:TV", href: "#tv", channel: "DIVINE:TV" },
+  { label: "DIVINE:ONE", href: "/", channel: "DIVINE:ONE" },
+  { label: "DIVINE:SUB", href: "/sub", channel: "DIVINE:SUB" },
+  { label: "DIVINE:CHILL", href: "/chill", channel: "DIVINE:CHILL" },
+  { label: "DIVINE:TV", href: "/tv", channel: "DIVINE:TV" },
 ];
 
 const SECONDARY_LINKS = [
   { label: "SCHEDULE", href: "#schedule" },
   { label: "RESIDENTS", href: "#residents" },
+  { label: "EVENTS", href: "/events" },
+  { label: "MERCH", href: "/merch" },
+  { label: "LISTEN BACK", href: "/listen-back" },
 ];
 
 export function Navbar() {

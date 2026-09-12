@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX, Volume1 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NowPlaying } from "@/lib/types";
@@ -16,6 +16,25 @@ export function LivePlayer({ nowPlaying }: LivePlayerProps) {
   const [volume, setVolume] = useState(0.75);
   const [isMuted, setIsMuted] = useState(false);
   const [prevVolume, setPrevVolume] = useState(0.75);
+  
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(e => console.error("Playback failed:", e));
+      } else {
+        audioRef.current.pause();
+      }
+    }
+  }, [isPlaying]);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume;
+      audioRef.current.muted = isMuted;
+    }
+  }, [volume, isMuted]);
 
   const handleTogglePlay = useCallback(() => {
     setIsPlaying((prev) => !prev);
@@ -153,6 +172,12 @@ export function LivePlayer({ nowPlaying }: LivePlayerProps) {
           />
         </div>
       </div>
+
+      <audio
+        ref={audioRef}
+        src={nowPlaying.streamUrl}
+        preload="none"
+      />
     </motion.div>
   );
 }
