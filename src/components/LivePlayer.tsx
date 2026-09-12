@@ -1,0 +1,158 @@
+"use client";
+
+import { useState, useCallback } from "react";
+import { Play, Pause, Volume2, VolumeX, Volume1 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { NowPlaying } from "@/lib/types";
+import { EQVisualiser } from "./EQVisualiser";
+import { DJAvatar } from "./DJAvatar";
+
+interface LivePlayerProps {
+  nowPlaying: NowPlaying;
+}
+
+export function LivePlayer({ nowPlaying }: LivePlayerProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(0.75);
+  const [isMuted, setIsMuted] = useState(false);
+  const [prevVolume, setPrevVolume] = useState(0.75);
+
+  const handleTogglePlay = useCallback(() => {
+    setIsPlaying((prev) => !prev);
+  }, []);
+
+  const handleMute = useCallback(() => {
+    if (isMuted) {
+      setVolume(prevVolume);
+      setIsMuted(false);
+    } else {
+      setPrevVolume(volume);
+      setVolume(0);
+      setIsMuted(true);
+    }
+  }, [isMuted, volume, prevVolume]);
+
+  const handleVolumeChange = useCallback((newVolume: number) => {
+    setVolume(newVolume);
+    setIsMuted(newVolume === 0);
+  }, []);
+
+  const VolumeIcon =
+    isMuted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.6, ease: [0.23, 1, 0.32, 1] }}
+      className="glass-panel w-full max-w-lg mx-auto p-6 md:p-8"
+    >
+      {/* ── Top: Live Badge + Channel ──────────────────── */}
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20">
+            <div
+              className="w-2 h-2 rounded-full bg-red-500"
+              style={{ animation: "pulse-live 2s infinite" }}
+            />
+            <span className="text-[10px] font-black tracking-[0.2em] text-red-400 uppercase">
+              LIVE NOW
+            </span>
+          </div>
+        </div>
+        <span className="text-[10px] font-bold tracking-[0.2em] text-brand-gold/60 uppercase">
+          {nowPlaying.channel}
+        </span>
+      </div>
+
+      {/* ── Middle: DJ Info ─────────────────────────────── */}
+      <div className="flex items-center gap-4 mb-6">
+        <DJAvatar
+          name={nowPlaying.dj}
+          avatarUrl={nowPlaying.avatarUrl}
+          size="lg"
+        />
+        <div className="flex-1 min-w-0">
+          <h3 className="text-lg font-bold text-white truncate leading-tight">
+            {nowPlaying.dj}
+          </h3>
+          <p className="text-sm text-white/50 truncate mt-0.5">
+            {nowPlaying.show}
+          </p>
+        </div>
+        <EQVisualiser isPlaying={isPlaying} barCount={5} />
+      </div>
+
+      {/* ── Bottom: Controls ───────────────────────────── */}
+      <div className="flex items-center gap-4">
+        {/* Play / Pause */}
+        <motion.button
+          whileTap={{ scale: 0.92 }}
+          onClick={handleTogglePlay}
+          className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:shadow-[0_0_20px_rgba(201,168,76,0.3)]"
+          style={{
+            background: isPlaying
+              ? "rgba(201, 168, 76, 0.15)"
+              : "linear-gradient(135deg, #C9A84C 0%, #E8D48B 100%)",
+          }}
+          aria-label={isPlaying ? "Pause" : "Play"}
+        >
+          <AnimatePresence mode="wait">
+            {isPlaying ? (
+              <motion.div
+                key="pause"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <Pause className="w-5 h-5 text-brand-gold" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="play"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <Play className="w-5 h-5 text-black ml-0.5" />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.button>
+
+        {/* ── Now Playing Text ──────────────────────── */}
+        <div className="flex-1 min-w-0">
+          <p className="text-[10px] font-bold tracking-[0.15em] text-white/30 uppercase">
+            NOW PLAYING ON DAB
+          </p>
+          <p className="text-xs text-white/60 truncate mt-0.5">
+            The Higher State of Audio
+          </p>
+        </div>
+
+        {/* ── Volume ───────────────────────────────── */}
+        <div className="hidden sm:flex items-center gap-2">
+          <button
+            onClick={handleMute}
+            className="p-1.5 text-white/40 hover:text-white transition-colors"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+          >
+            <VolumeIcon className="w-4 h-4" />
+          </button>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={volume}
+            onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
+            className="w-20"
+            aria-label="Volume"
+          />
+        </div>
+      </div>
+    </motion.div>
+  );
+}
