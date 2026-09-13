@@ -8,17 +8,17 @@ export default function AdminAnalyticsPage() {
   const [timeRange, setTimeRange] = useState("30d");
 
   const kpis = [
-    { label: "Total Stream Impressions", value: "813,420", change: "+18.4%", trend: "up", icon: Radio },
-    { label: "Active Monthly Listeners", value: "94,120", change: "+12.1%", trend: "up", icon: Users },
-    { label: "Average Session Duration", value: "48m 12s", change: "+6.8%", trend: "up", icon: Headphones },
-    { label: "Ad Commercial Revenue", value: "£14,850", change: "+22.5%", trend: "up", icon: DollarSign },
+    { label: "Total Unique Listeners", value: "18,420", change: "+14.2%", trend: "up", icon: Radio },
+    { label: "Active Monthly Listeners", value: "12,140", change: "+8.1%", trend: "up", icon: Users },
+    { label: "Average Session Duration", value: "1h 14m", change: "+12.4%", trend: "up", icon: Headphones },
+    { label: "Mixcloud Re-listens", value: "4,850", change: "+22.5%", trend: "up", icon: DollarSign },
   ];
 
   const channelsPerformance = [
-    { channel: "DIVINE:ONE (Flagship DAB)", share: "46%", peak: "4,120 concurrent", bitRate: "128kbps HD" },
-    { channel: "DIVINE:SUB (Bass / Jungle)", share: "28%", peak: "2,840 concurrent", bitRate: "192kbps" },
-    { channel: "DIVINE:CHILL (Balearic / Deep)", share: "16%", peak: "1,620 concurrent", bitRate: "192kbps" },
-    { channel: "DIVINE:TV (Live Studio Video)", share: "10%", peak: "1,050 concurrent", bitRate: "1080p60" },
+    { channel: "DIVINE:ONE (Flagship DAB)", share: "46%", peak: "850 concurrent", bitRate: "128kbps HD" },
+    { channel: "DIVINE:SUB (Bass / Jungle)", share: "28%", peak: "420 concurrent", bitRate: "192kbps" },
+    { channel: "DIVINE:CHILL (Balearic / Deep)", share: "16%", peak: "210 concurrent", bitRate: "192kbps" },
+    { channel: "DIVINE:TV (Live Studio Video)", share: "10%", peak: "120 concurrent", bitRate: "1080p60" },
   ];
 
   return (

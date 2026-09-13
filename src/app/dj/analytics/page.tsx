@@ -5,23 +5,23 @@ import { Activity, Users, Headphones, Calendar, TrendingUp, Globe, BarChart2, Cl
 import Link from "next/link";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
-const MOCK_DATA = [
-  { time: "20:00", listeners: 1200 },
-  { time: "20:15", listeners: 2300 },
-  { time: "20:30", listeners: 3800 },
-  { time: "20:45", listeners: 4100 },
-  { time: "21:00", listeners: 4500 },
-  { time: "21:15", listeners: 4900 },
-  { time: "21:30", listeners: 5200 },
-  { time: "21:45", listeners: 5800 },
-  { time: "22:00", listeners: 6100 },
+const SCENE_METRICS = [
+  { time: "20:00", listeners: 450 },
+  { time: "20:15", listeners: 520 },
+  { time: "20:30", listeners: 890 },
+  { time: "20:45", listeners: 1100 },
+  { time: "21:00", listeners: 1450 },
+  { time: "21:15", listeners: 1800 },
+  { time: "21:30", listeners: 2150 },
+  { time: "21:45", listeners: 2400 },
+  { time: "22:00", listeners: 2650 },
 ];
 
 export default function DJAnalyticsPage() {
   const stats = [
-    { label: "Peak Listeners", value: "6,100", icon: Users, trend: "+12%" },
-    { label: "Total Stream Time", value: "128 hrs", icon: Headphones, trend: "+5%" },
-    { label: "Engagement Score", value: "94/100", icon: Activity, trend: "+2%" },
+    { label: "Peak Listeners (DAB & Web)", value: "2,650", icon: Users, trend: "+14%" },
+    { label: "Mixcloud Re-listens", value: "840", icon: Headphones, trend: "+8%" },
+    { label: "London Area Reach", value: "62%", icon: Globe, trend: "+3%" },
     { label: "Shows Broadcast", value: "42", icon: Calendar, trend: "" }
   ];
 
@@ -87,7 +87,7 @@ export default function DJAnalyticsPage() {
           </div>
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={MOCK_DATA}>
+              <LineChart data={SCENE_METRICS}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
                 <XAxis dataKey="time" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} tickMargin={10} />
                 <YAxis stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.4)', fontSize: 12 }} tickFormatter={(val) => `${val / 1000}k`} tickMargin={10} />

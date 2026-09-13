@@ -507,7 +507,7 @@ export const RESIDENTS: Resident[] = [
     name: "DEANSTAR",
     showName: "DEANSTAR Show",
     genres: ["House"],
-    avatarUrl: "/images/djs/mock-up.png",
+    avatarUrl: "/images/djs/dj_default.jpg",
     slot: "TBA",
     day: "TBA",
     channel: "DIVINE:ONE",
