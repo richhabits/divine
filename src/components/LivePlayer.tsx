@@ -56,11 +56,26 @@ export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.play().catch(e => console.error("Playback failed:", e));
+        
+        // Setup Media Session API for lock screen controls
+        if ("mediaSession" in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: liveTrack || "Live Broadcast",
+            artist: liveArtist || initialNowPlaying.dj,
+            album: initialNowPlaying.show,
+            artwork: [
+              { src: initialNowPlaying.avatarUrl, sizes: "512x512", type: "image/jpeg" }
+            ]
+          });
+          
+          navigator.mediaSession.setActionHandler('play', () => handleTogglePlay());
+          navigator.mediaSession.setActionHandler('pause', () => handleTogglePlay());
+        }
       } else {
         audioRef.current.pause();
       }
     }
-  }, [isPlaying]);
+  }, [isPlaying, liveTrack, liveArtist, initialNowPlaying, handleTogglePlay]);
 
   useEffect(() => {
     if (audioRef.current) {
