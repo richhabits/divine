@@ -189,10 +189,24 @@ export default function MerchPage() {
                   </div>
                 )}
                 
-                <button className="w-full py-4 rounded-xl bg-white text-black font-black tracking-widest uppercase text-[11px] flex items-center justify-center gap-3 hover:bg-brand-gold transition-colors mt-auto">
-                  <CreditCard className="w-4 h-4" />
-                  Buy Now via Stripe
-                </button>
+                <div className="flex flex-col gap-2 mt-auto">
+                  <a
+                    href={`https://wa.me/447000000000?text=${encodeURIComponent(
+                      `Hello DIVINE Store! I would like to order: ${selectedProduct.name} (${selectedProduct.price})${
+                        selectedProduct.sizes ? ` - Size: ${selectedSize}` : ""
+                      }`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full py-3.5 rounded-xl bg-brand-gold text-black font-black tracking-widest uppercase text-[11px] flex items-center justify-center gap-2 hover:brightness-110 transition-all text-center no-underline shadow-[0_0_20px_rgba(201,168,76,0.3)]"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    Order Direct / VIP Concierge
+                  </a>
+                  <p className="text-[10px] text-center text-white/40 tracking-wider uppercase">
+                    Secured by DIVINE Radio London &bull; Express Dispatch
+                  </p>
+                </div>
               </div>
             </motion.div>
           </>

@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 const Shoutbox = dynamic(() => import("@/components/Shoutbox").then(m => ({ default: m.Shoutbox })));
 const AICopilot = dynamic(() => import("@/components/AICopilot").then(m => ({ default: m.AICopilot })));
 const WhatsAppFAB = dynamic(() => import("@/components/WhatsAppFAB").then(m => ({ default: m.WhatsAppFAB })));
+const PWAInstallPrompt = dynamic(() => import("@/components/PWAInstallPrompt").then(m => ({ default: m.PWAInstallPrompt })));
 
 const inter = Inter({
   subsets: ["latin"],
@@ -76,6 +77,7 @@ export default function RootLayout({
           <Shoutbox />
           <AICopilot />
           <WhatsAppFAB />
+          <PWAInstallPrompt />
           <script
             dangerouslySetInnerHTML={{
               __html: `console.log("%cDIVINE RADIO LONDON — IP PROTECTED BY HECTIC", "font-weight: bold; font-size: 15px; color: #C9A84C; background: #09090b; padding: 8px 14px; border: 1px solid rgba(201,168,76,0.5); border-radius: 4px;");
