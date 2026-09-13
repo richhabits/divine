@@ -52,10 +52,10 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   }
 
   // Fetch live telemetry from Icecast
-  let currentListeners = 1402;
-  let peakToday = 3891;
-  let sourceDJ = "DJ Fivestack";
-  let streamStatus: "LIVE" | "STANDBY" = "LIVE";
+  let currentListeners = 0;
+  let peakToday = 0;
+  let sourceDJ = "Offline";
+  let streamStatus: "LIVE" | "STANDBY" = "STANDBY";
 
   try {
     const res = await fetch("https://orbit.citrus3.com:2020/status-json.xsl", {
@@ -70,6 +70,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
         : sources;
 
       if (source) {
+        streamStatus = "LIVE";
         currentListeners = source.listeners ?? currentListeners;
         if (source.title) {
           const [artist] = source.title.split(" - ");
@@ -80,7 +81,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
       }
     }
   } catch {
-    // Keep baseline values
+    // Keep baseline values (0, Offline, STANDBY)
   }
 
   return {

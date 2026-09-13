@@ -84,3 +84,26 @@ export async function deleteScheduleSlot(id: string) {
   revalidatePath("/admin/schedule");
   return { success: true };
 }
+
+export async function updateScheduleSlot(id: string, data: { day: string, slot: string, channel: string, residentId: string, isLive: boolean }) {
+  const { getServerSession } = await import("next-auth");
+  const { authOptions } = await import("@/lib/auth");
+  const session = await getServerSession(authOptions);
+  if (!session || session.user?.role !== "ADMIN") {
+    return { success: false, error: "Unauthorized: Admin session required." };
+  }
+
+  const prisma = await tryPrisma();
+  if (!prisma) return { success: false, error: "Database not available" };
+
+  const { revalidatePath } = await import("next/cache");
+
+  await prisma.scheduleSlot.update({
+    where: { id },
+    data
+  });
+  
+  revalidatePath("/");
+  revalidatePath("/admin/schedule");
+  return { success: true };
+}

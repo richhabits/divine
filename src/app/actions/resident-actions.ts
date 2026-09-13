@@ -128,3 +128,34 @@ export async function deleteResident(id: string) {
   revalidatePath("/admin/users");
   return { success: true };
 }
+
+export async function updateResident(id: string, data: Omit<Resident, "id" | "slot" | "day" | "channel">) {
+  const { getServerSession } = await import("next-auth");
+  const { authOptions } = await import("@/lib/auth");
+  const session = await getServerSession(authOptions);
+  if (!session || session.user?.role !== "ADMIN") {
+    return { success: false, error: "Unauthorized: Admin session required." };
+  }
+
+  const prisma = await tryPrisma();
+  if (!prisma) return { success: false, error: "Database not available" };
+
+  const { revalidatePath } = await import("next/cache");
+  
+  await prisma.resident.update({
+    where: { id },
+    data: {
+      name: data.name,
+      showName: data.showName,
+      genres: JSON.stringify(data.genres),
+      avatarUrl: data.avatarUrl,
+      bio: data.bio,
+      mixcloudUrl: data.mixcloudUrl
+    }
+  });
+  
+  revalidatePath("/");
+  revalidatePath("/residents");
+  revalidatePath("/admin/users");
+  return { success: true };
+}
