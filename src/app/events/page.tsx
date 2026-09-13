@@ -1,9 +1,22 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Calendar, MapPin, CreditCard } from "lucide-react";
+
+interface Event {
+  id: string;
+  title: string;
+  date: string;
+  venue: string;
+  price: string;
+  status: string;
+}
 
 export default function EventsPage() {
-  const events = [
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  
+  const events: Event[] = [
     {
       id: "ev-1",
       title: "DIVINE Summer Boat Party",
@@ -72,12 +85,14 @@ export default function EventsPage() {
               <h3 className="text-xl font-bold mb-2 tracking-tight group-hover:text-brand-gold transition-colors">
                 {ev.title}
               </h3>
-              <p className="text-white/40 text-sm mb-6 flex-1">
+              <p className="text-white/40 text-sm mb-6 flex-1 flex items-center gap-2">
+                <MapPin className="w-4 h-4" />
                 {ev.venue}
               </p>
               <div className="flex items-center justify-between pt-4 border-t border-white/5">
                 <span className="font-bold text-lg">{ev.price}</span>
                 <button
+                  onClick={() => setSelectedEvent(ev)}
                   disabled={ev.status === "SOLD OUT"}
                   className="px-4 py-2 text-[10px] font-bold tracking-[0.2em] uppercase rounded bg-white text-black hover:bg-brand-gold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -88,6 +103,67 @@ export default function EventsPage() {
           ))}
         </div>
       </div>
+
+      {/* Ticket Modal */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedEvent(null)}
+              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: 50, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 50, scale: 0.95 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-full max-w-md glass-panel border border-brand-gold/30 rounded-2xl shadow-[0_0_50px_rgba(201,168,76,0.15)] overflow-hidden"
+            >
+              <div className="bg-brand-gold p-4 flex justify-between items-center text-black">
+                <h3 className="font-black tracking-[0.2em] uppercase text-xs">Secure Your Spot</h3>
+                <button onClick={() => setSelectedEvent(null)} className="hover:opacity-70 transition-opacity">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-6 md:p-8">
+                <h2 className="text-2xl font-bold mb-2">{selectedEvent.title}</h2>
+                <div className="flex flex-col gap-3 mb-8 text-white/70 text-sm">
+                   <div className="flex items-center gap-3">
+                     <Calendar className="w-4 h-4 text-brand-gold" />
+                     {selectedEvent.date}
+                   </div>
+                   <div className="flex items-center gap-3">
+                     <MapPin className="w-4 h-4 text-brand-gold" />
+                     {selectedEvent.venue}
+                   </div>
+                </div>
+                
+                <div className="border-t border-white/10 pt-6 mb-6">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-white/50 text-sm">General Admission</span>
+                    <span className="font-bold">{selectedEvent.price}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-xs text-white/30">
+                    <span>Booking Fee</span>
+                    <span>£2.50</span>
+                  </div>
+                </div>
+                
+                <button className="w-full py-4 rounded-xl bg-white text-black font-black tracking-widest uppercase text-[11px] flex items-center justify-center gap-3 hover:bg-brand-gold transition-colors">
+                  <CreditCard className="w-4 h-4" />
+                  Proceed to Checkout
+                </button>
+                <p className="text-center text-[10px] text-white/30 mt-4">
+                  Payments are secured by Stripe. All sales are final.
+                </p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

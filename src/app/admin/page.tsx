@@ -1,92 +1,85 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
-import { motion } from "framer-motion";
-import { LogOut, Settings, Users, Radio, Calendar } from "lucide-react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Users, Calendar, Settings, ShieldAlert, BarChart3, Radio } from "lucide-react";
+import Link from "next/link";
 
-export default function AdminPortal() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-    } else if (session?.user?.role === "DJ") {
-      router.push("/dj");
-    }
-  }, [status, session, router]);
-
-  if (status === "loading" || !session) {
-    return <div className="min-h-screen bg-black flex items-center justify-center text-white/50">Loading Admin...</div>;
-  }
-
+export default function AdminDashboard() {
   return (
-    <div className="min-h-screen bg-black text-white pt-24 px-6 md:px-12 pb-16">
+    <div className="min-h-screen bg-black text-white px-6 pt-32 pb-24">
       <div className="max-w-6xl mx-auto">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-500 mb-2 block">
-              System Administrator
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-500 mb-4 block flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4" /> Command Center
             </span>
-            <h1 className="text-3xl md:text-5xl font-black tracking-tighter">
-              CONTROL PANEL
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter">
+              SYSTEM ADMIN.
             </h1>
-          </motion.div>
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-lg text-sm font-bold transition-colors border border-red-500/20"
-          >
-            <LogOut className="w-4 h-4" />
-            End Session
-          </button>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { title: "Network Status", icon: Radio, value: "4 CHANNELS LIVE", color: "text-green-500" },
-            { title: "Active DJs", icon: Users, value: "12 ONLINE", color: "text-brand-gold" },
-            { title: "Schedule", icon: Calendar, value: "SYNCED", color: "text-blue-400" },
-            { title: "System", icon: Settings, value: "NOMINAL", color: "text-white/60" }
-          ].map((stat, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="glass-panel p-6 rounded-2xl border border-white/5"
-            >
-              <stat.icon className={`w-6 h-6 mb-4 ${stat.color}`} />
-              <h3 className="text-sm text-white/50 mb-1">{stat.title}</h3>
-              <p className={`text-lg font-bold tracking-tight ${stat.color}`}>{stat.value}</p>
-            </motion.div>
-          ))}
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[9px] font-bold tracking-[0.2em] text-green-400 uppercase">
+                All Systems Operational
+              </span>
+            </div>
+          </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-8 glass-panel p-6 rounded-2xl border border-white/10"
-        >
-          <h2 className="text-xl font-bold mb-6">Global Settings Override</h2>
-          <p className="text-sm text-white/50 mb-4">
-            Warning: Changes here affect all clients currently connected to the DIVINE Network.
-          </p>
-          <div className="flex items-center gap-4">
-            <button className="px-6 py-3 text-[10px] font-black tracking-[0.2em] uppercase rounded bg-red-500 text-white hover:bg-red-600 transition-colors">
-              Trigger Emergency Broadcast
-            </button>
-            <button className="px-6 py-3 text-[10px] font-black tracking-[0.2em] uppercase rounded bg-white/10 text-white hover:bg-white/20 transition-colors">
-              Refresh Schedule Cache
-            </button>
+        {/* Dashboard Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          <Link href="/admin/schedule" className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group relative overflow-hidden">
+            <Calendar className="w-8 h-8 text-white/40 mb-6 group-hover:text-red-500 transition-colors relative z-10" />
+            <h3 className="text-xl font-black mb-2 relative z-10">Schedule Editor</h3>
+            <p className="text-white/40 text-sm relative z-10">
+              Manage the 24/7 timetable. Assign DJs to slots and manage auto-play archives.
+            </p>
+          </Link>
+
+          <Link href="/admin/users" className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group relative overflow-hidden">
+            <Users className="w-8 h-8 text-white/40 mb-6 group-hover:text-red-500 transition-colors relative z-10" />
+            <h3 className="text-xl font-black mb-2 relative z-10">User Management</h3>
+            <p className="text-white/40 text-sm relative z-10">
+              Approve DJ applications, manage permissions, and handle listener accounts.
+            </p>
+          </Link>
+
+          <Link href="/admin/analytics" className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-red-500/30 transition-all group relative overflow-hidden">
+            <BarChart3 className="w-8 h-8 text-white/40 mb-6 group-hover:text-red-500 transition-colors relative z-10" />
+            <h3 className="text-xl font-black mb-2 relative z-10">Global Analytics</h3>
+            <p className="text-white/40 text-sm relative z-10">
+              View total stream connections, ad impressions, and engagement metrics.
+            </p>
+          </Link>
+        </div>
+
+        {/* Server Status Widget */}
+        <div className="glass-panel p-8 rounded-2xl border border-white/5 bg-zinc-950/50">
+          <div className="flex items-center gap-3 mb-8">
+            <Radio className="w-5 h-5 text-white/50" />
+            <h2 className="text-xl font-black">Icecast Stream Status</h2>
           </div>
-        </motion.div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <span className="block text-xs text-white/50 mb-1">Current Listeners</span>
+              <span className="text-2xl font-black">1,402</span>
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <span className="block text-xs text-white/50 mb-1">Peak Today</span>
+              <span className="text-2xl font-black">3,891</span>
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <span className="block text-xs text-white/50 mb-1">Mount Point</span>
+              <span className="text-lg font-bold text-brand-gold truncate">/divineradiolondon</span>
+            </div>
+            <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+              <span className="block text-xs text-white/50 mb-1">Source DJ</span>
+              <span className="text-lg font-bold text-green-400 truncate">DJ Fivestack</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );

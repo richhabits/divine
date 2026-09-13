@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Menu, X, Radio } from "lucide-react";
-import { NavLink } from "@/lib/types";
+import { Menu, X, Radio, LogIn } from "lucide-react";
+import { Channel } from "@/lib/types";
+
+interface NavLink {
+  label: string;
+  href: string;
+  channel?: Channel;
+}
 
 const NAV_LINKS: NavLink[] = [
   { label: "DIVINE:ONE", href: "/", channel: "DIVINE:ONE" },
@@ -18,6 +25,8 @@ const SECONDARY_LINKS = [
   { label: "EVENTS", href: "/events" },
   { label: "MERCH", href: "/merch" },
   { label: "LISTEN BACK", href: "/listen-back" },
+  { label: "FAQ", href: "/faq" },
+  { label: "JOIN US", href: "/join-us" },
 ];
 
 export function Navbar() {
@@ -60,11 +69,17 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 md:px-8 lg:px-12">
         <div className="flex h-20 items-center justify-between gap-4">
           {/* ── Logo ────────────────────────────────────── */}
-          <Link href="/" className="flex items-center gap-2 no-underline group">
-            <Radio className="w-5 h-5 text-brand-gold opacity-80 group-hover:opacity-100 transition-opacity" />
-            <span className="text-xl font-black tracking-[0.18em] text-white">
-              DIVINE
-            </span>
+          <Link href="/" className="flex items-center gap-2 no-underline group hover:scale-105 transition-transform">
+            <div className="relative w-12 h-12 md:w-16 md:h-16 flex items-center justify-center">
+              <Image 
+                src="/images/logo.png" 
+                alt="DIVINE Radio Logo" 
+                fill 
+                sizes="(max-width: 768px) 48px, 64px"
+                className="object-contain drop-shadow-[0_0_12px_rgba(201,168,76,0.35)]"
+                priority
+              />
+            </div>
           </Link>
 
           {/* ── Desktop Nav ─────────────────────────────── */}
@@ -117,6 +132,15 @@ export function Navbar() {
               </span>
             </div>
 
+            {/* Sign In */}
+            <Link
+              href="/login"
+              className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded bg-white/[0.03] border border-white/[0.05] text-[9px] font-black tracking-[0.15em] text-white/40 uppercase hover:text-brand-gold hover:border-brand-gold/30 transition-all"
+            >
+              <LogIn className="w-3 h-3" />
+              Sign In
+            </Link>
+
             {/* Mobile menu toggle */}
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -152,6 +176,15 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            <div className="h-[1px] bg-white/5" />
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-2 text-[11px] font-bold tracking-[0.22em] uppercase text-brand-gold py-2"
+            >
+              <LogIn className="w-3.5 h-3.5" />
+              Sign In to Portal
+            </Link>
           </nav>
         )}
       </div>

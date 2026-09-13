@@ -1,102 +1,104 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
 import { motion } from "framer-motion";
-import { LogOut, Music, Radio } from "lucide-react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Mic2, Radio, Users, Activity, Settings, PlayCircle, Upload } from "lucide-react";
+import { STATION_INFO } from "@/lib/schedule-data";
+import Link from "next/link";
 
-export default function DJPortal() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-    } else if (session?.user?.role === "ADMIN") {
-      router.push("/admin");
-    }
-  }, [status, session, router]);
-
-  if (status === "loading" || !session) {
-    return <div className="min-h-screen bg-black flex items-center justify-center text-white/50">Loading Portal...</div>;
-  }
-
+export default function DJDashboard() {
   return (
-    <div className="min-h-screen bg-black text-white pt-24 px-6 md:px-12 pb-16">
+    <div className="min-h-screen bg-black text-white px-6 pt-32 pb-24">
       <div className="max-w-6xl mx-auto">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-brand-gold mb-2 block">
-              Creator Studio
+        <div className="flex items-end justify-between mb-12">
+          <div>
+            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-brand-gold mb-4 block">
+              Artist Portal
             </span>
-            <h1 className="text-3xl md:text-5xl font-black tracking-tighter">
-              WELCOME, {session.user.name?.toUpperCase()}
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter">
+              YOUR DASHBOARD.
             </h1>
-          </motion.div>
-          <button
-            onClick={() => signOut({ callbackUrl: "/login" })}
-            className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm font-bold transition-colors border border-white/10"
-          >
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Stream Status Widget */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="glass-panel p-6 rounded-2xl border border-brand-gold/30 flex flex-col"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Radio className="text-brand-gold w-6 h-6" />
-              <h2 className="text-xl font-bold">Studio Feed</h2>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[9px] font-bold tracking-[0.2em] text-green-400 uppercase">
+                Server Online
+              </span>
             </div>
-            
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-              <p className="text-sm font-bold text-white/70">You are currently OFFLINE</p>
-            </div>
-            
-            <button className="mt-auto w-full py-4 text-[11px] font-black tracking-[0.3em] uppercase rounded bg-white/10 text-white/50 border border-white/20 cursor-not-allowed">
-              Go Live (Disabled in Mockup)
-            </button>
-          </motion.div>
-
-          {/* Tracklist Widget */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="glass-panel p-6 rounded-2xl border border-white/10 col-span-1 md:col-span-2"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <Music className="text-white/60 w-6 h-6" />
-              <h2 className="text-xl font-bold">Live Tracklist</h2>
-            </div>
-            
-            <p className="text-sm text-white/50 mb-4">
-              Update the tracklist below to sync metadata to the global stream and DIVINE player.
-            </p>
-            
-            <div className="flex flex-col gap-4">
-              <div className="grid grid-cols-2 gap-4">
-                <input type="text" placeholder="Artist Name" className="bg-white/5 border border-white/10 rounded-lg p-3 text-sm focus:border-brand-gold/50 outline-none" />
-                <input type="text" placeholder="Track Title" className="bg-white/5 border border-white/10 rounded-lg p-3 text-sm focus:border-brand-gold/50 outline-none" />
-              </div>
-              <button className="px-6 py-3 text-[10px] font-black tracking-[0.2em] uppercase rounded bg-brand-gold text-black self-end hover:shadow-[0_0_20px_rgba(201,168,76,0.3)] transition-all">
-                Push Metadata
-              </button>
-            </div>
-          </motion.div>
+          </div>
         </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="glass-panel p-8 rounded-2xl border border-brand-gold/30 bg-brand-gold/5 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-brand-gold/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Mic2 className="w-8 h-8 text-brand-gold mb-6" />
+            <h3 className="text-xl font-black mb-2 relative z-10">Go Live</h3>
+            <p className="text-white/40 text-sm mb-6 relative z-10">
+              Connect your broadcast software to Icecast.
+            </p>
+            <div className="space-y-3 relative z-10">
+              <div className="flex justify-between text-xs">
+                <span className="text-white/50">Server:</span>
+                <span className="font-mono text-brand-gold">orbit.citrus3.com</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-white/50">Port:</span>
+                <span className="font-mono text-brand-gold">2020</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-white/50">Mount:</span>
+                <span className="font-mono text-brand-gold">/divineradiolondon</span>
+              </div>
+              <div className="flex justify-between text-xs">
+                <span className="text-white/50">Password:</span>
+                <span className="font-mono text-brand-gold blur-sm hover:blur-none transition-all cursor-pointer">••••••••</span>
+              </div>
+            </div>
+          </div>
+
+          <Link href="/dj/upload" className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-white/20 transition-all group">
+            <Upload className="w-8 h-8 text-white/40 mb-6 group-hover:text-brand-gold transition-colors" />
+            <h3 className="text-xl font-black mb-2">Upload Mix</h3>
+            <p className="text-white/40 text-sm mb-6">
+              Upload a pre-recorded show to the cloud. We will auto-play it during your slot if you aren't live.
+            </p>
+          </Link>
+
+          <Link href="/dj/analytics" className="glass-panel p-8 rounded-2xl border border-white/5 hover:border-white/20 transition-all group">
+            <Activity className="w-8 h-8 text-white/40 mb-6 group-hover:text-brand-gold transition-colors" />
+            <h3 className="text-xl font-black mb-2">Analytics</h3>
+            <p className="text-white/40 text-sm mb-6">
+              View listener statistics, peak concurrents, and mixcloud engagement.
+            </p>
+          </Link>
+        </div>
+
+        {/* Current Schedule Info */}
+        <div className="glass-panel p-8 rounded-2xl border border-white/5">
+          <div className="flex items-center gap-3 mb-8">
+            <Radio className="w-5 h-5 text-white/50" />
+            <h2 className="text-xl font-black">Upcoming Slots</h2>
+          </div>
+          
+          <div className="space-y-4">
+            {[
+              { day: "Today", time: "20:00 - 22:00", type: "Live Broadcast" },
+              { day: "Next Friday", time: "18:00 - 20:00", type: "Pre-recorded (Auto)" }
+            ].map((slot, i) => (
+              <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                <div>
+                  <span className="block text-sm font-bold text-brand-gold mb-1">{slot.day}</span>
+                  <span className="block text-xs text-white/50">{slot.time}</span>
+                </div>
+                <span className="px-3 py-1 rounded-full bg-white/10 text-[9px] font-bold tracking-[0.2em] uppercase text-white/70">
+                  {slot.type}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );

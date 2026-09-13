@@ -22,7 +22,34 @@
 
 # misc
 .DS_Store
+._*
 *.pem
+*.key
+*.crt
+*.cert
+
+# IDE & agent configs (keeps git clean)
+.agents/
+.claude/
+.cursor/
+.devin/
+.idea/
+.vscode/
+
+# temporary scratch files
+fetch_djs.py
+home_page_clean.txt
+*.pyc
+__pycache__/
+
+# local database and runtime storage (prevents sensitive data leaks)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+prisma/*.db
+prisma/*.db-journal
+/data/
 
 # debug
 npm-debug.log*

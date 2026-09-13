@@ -3,9 +3,10 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock, Music } from "lucide-react";
-import { DJSlot, DayOfWeek } from "@/lib/types";
-import { schedule } from "@/lib/schedule-data";
+import { DayOfWeek } from "@/lib/types";
 import { DJAvatar } from "./DJAvatar";
+import { getScheduleSlots } from "@/app/actions/schedule-actions";
+import { schedule as defaultSchedule } from "@/lib/schedule-data";
 
 const DAYS: { key: DayOfWeek; label: string }[] = [
   { key: "MON", label: "Mon" },
@@ -23,7 +24,7 @@ function getCurrentDay(): DayOfWeek {
   return map[jsDay];
 }
 
-function SlotCard({ slot, index }: { slot: DJSlot; index: number }) {
+function SlotCard({ slot, index }: { slot: any; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -82,11 +83,14 @@ function SlotCard({ slot, index }: { slot: DJSlot; index: number }) {
 
 export function ScheduleGrid() {
   const [activeDay, setActiveDay] = useState<DayOfWeek>(getCurrentDay());
+  const [schedule, setSchedule] = useState<any[]>(defaultSchedule);
 
-  // Update active day on mount (client-side only)
+  // Update active day on mount (client-side only) and pull DB updates if any
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setActiveDay(getCurrentDay());
+    getScheduleSlots().then((slots) => {
+      if (slots && slots.length > 0) setSchedule(slots);
+    });
   }, []);
 
   const filtered = useMemo(

@@ -1,28 +1,29 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Camera, PlaySquare } from "lucide-react"; // PlaySquare as TikTok fallback
+import Image from "next/image";
+import { Camera, PlaySquare } from "lucide-react";
 
 export function SocialFeed() {
   const posts = [
     {
       id: "p1",
       platform: "instagram",
-      image: "/images/dj_anton_james_1789249211645.jpg",
+      image: "/images/djs/anton-james.jpg",
       caption: "Live in the studio right now! 🔥 @antonjames #DIVINE",
     },
     {
       id: "p2",
       platform: "tiktok",
-      image: "/images/dj_elena_cruz_1789248949747.jpg",
+      image: "/images/djs/elena-cruz.jpg",
       caption: "When the bass drops just right 🔊",
     },
     {
       id: "p3",
       platform: "instagram",
-      image: "/images/dj_marcus_vance_1789248755674.jpg",
-      caption: "Getting ready for Jungle Fever tonight.",
-    }
+      image: "/images/djs/marc-anthony.jpg",
+      caption: "Getting ready for the Saturday UKG Anthem Show.",
+    },
   ];
 
   return (
@@ -56,14 +57,16 @@ export function SocialFeed() {
             transition={{ duration: 0.5, delay: i * 0.1 }}
             className="group cursor-pointer block relative rounded-2xl overflow-hidden aspect-square border border-white/10"
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={post.image}
               alt={post.caption}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-            
+
             <div className="absolute top-4 right-4 z-10 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center border border-white/10">
               {post.platform === "instagram" ? (
                 <Camera className="w-4 h-4 text-white" />

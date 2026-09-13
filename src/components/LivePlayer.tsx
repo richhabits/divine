@@ -11,13 +11,46 @@ interface LivePlayerProps {
   nowPlaying: NowPlaying;
 }
 
-export function LivePlayer({ nowPlaying }: LivePlayerProps) {
+export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0.75);
   const [isMuted, setIsMuted] = useState(false);
   const [prevVolume, setPrevVolume] = useState(0.75);
+  const [liveTrack, setLiveTrack] = useState<string>("");
+  const [liveArtist, setLiveArtist] = useState<string>("");
+  const [listeners, setListeners] = useState<number>(0);
+  const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextInitialized = useRef(false);
+
+  // Poll /api/now-playing every 15 seconds for real metadata
+  useEffect(() => {
+    let active = true;
+
+    async function fetchNowPlaying() {
+      try {
+        const res = await fetch("/api/now-playing");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active) {
+          setLiveTrack(data.track || "Live Broadcast");
+          setLiveArtist(data.artist || "DIVINE Radio London");
+          setListeners(data.listeners || 0);
+        }
+      } catch {
+        // silently fail — use fallback text
+      }
+    }
+
+    fetchNowPlaying();
+    const interval = setInterval(fetchNowPlaying, 15000);
+
+    return () => {
+      active = false;
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -37,6 +70,24 @@ export function LivePlayer({ nowPlaying }: LivePlayerProps) {
   }, [volume, isMuted]);
 
   const handleTogglePlay = useCallback(() => {
+    if (!audioContextInitialized.current && audioRef.current) {
+      try {
+        const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        const audioCtx = new AudioContext();
+        const analyserNode = audioCtx.createAnalyser();
+        analyserNode.fftSize = 256;
+        
+        const source = audioCtx.createMediaElementSource(audioRef.current);
+        source.connect(analyserNode);
+        analyserNode.connect(audioCtx.destination);
+        
+        setAnalyser(analyserNode);
+        audioContextInitialized.current = true;
+      } catch (err) {
+        console.error("Web Audio API not supported or blocked by CORS:", err);
+      }
+    }
+
     setIsPlaying((prev) => !prev);
   }, []);
 
@@ -78,28 +129,33 @@ export function LivePlayer({ nowPlaying }: LivePlayerProps) {
               LIVE NOW
             </span>
           </div>
+          {listeners > 0 && (
+            <span className="text-[10px] font-bold text-white/30">
+              {listeners} listening
+            </span>
+          )}
         </div>
         <span className="text-[10px] font-bold tracking-[0.2em] text-brand-gold/60 uppercase">
-          {nowPlaying.channel}
+          {initialNowPlaying.channel}
         </span>
       </div>
 
       {/* ── Middle: DJ Info ─────────────────────────────── */}
       <div className="flex items-center gap-4 mb-6">
         <DJAvatar
-          name={nowPlaying.dj}
-          avatarUrl={nowPlaying.avatarUrl}
+          name={initialNowPlaying.dj}
+          avatarUrl={initialNowPlaying.avatarUrl}
           size="lg"
         />
         <div className="flex-1 min-w-0">
           <h3 className="text-lg font-bold text-white truncate leading-tight">
-            {nowPlaying.dj}
+            {initialNowPlaying.dj}
           </h3>
           <p className="text-sm text-white/50 truncate mt-0.5">
-            {nowPlaying.show}
+            {initialNowPlaying.show}
           </p>
         </div>
-        <EQVisualiser isPlaying={isPlaying} barCount={5} />
+        <EQVisualiser isPlaying={isPlaying} barCount={5} analyser={analyser} />
       </div>
 
       {/* ── Bottom: Controls ───────────────────────────── */}
@@ -141,13 +197,13 @@ export function LivePlayer({ nowPlaying }: LivePlayerProps) {
           </AnimatePresence>
         </motion.button>
 
-        {/* ── Now Playing Text ──────────────────────── */}
+        {/* ── Now Playing Text (live from Icecast) ─── */}
         <div className="flex-1 min-w-0">
           <p className="text-[10px] font-bold tracking-[0.15em] text-white/30 uppercase">
-            NOW PLAYING ON DAB
+            {liveArtist || "NOW PLAYING ON DAB"}
           </p>
           <p className="text-xs text-white/60 truncate mt-0.5">
-            The Higher State of Audio
+            {liveTrack || "The Higher State of Audio"}
           </p>
         </div>
 
@@ -175,8 +231,9 @@ export function LivePlayer({ nowPlaying }: LivePlayerProps) {
 
       <audio
         ref={audioRef}
-        src={nowPlaying.streamUrl}
+        src={initialNowPlaying.streamUrl}
         preload="none"
+        crossOrigin="anonymous"
       />
     </motion.div>
   );

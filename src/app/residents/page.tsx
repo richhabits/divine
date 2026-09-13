@@ -1,10 +1,20 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { residents } from "@/lib/schedule-data";
 import { DJAvatar } from "@/components/DJAvatar";
+import { useState, useEffect } from "react";
+import { Resident } from "@/lib/types";
+import { RESIDENTS } from "@/lib/schedule-data";
+import { getResidents } from "@/app/actions/resident-actions";
 
 export default function ResidentsPage() {
+  const [residents, setResidents] = useState<Resident[]>(RESIDENTS);
+
+  useEffect(() => {
+    getResidents().then((data) => {
+      if (data && data.length > 0) setResidents(data);
+    });
+  }, []);
   return (
     <div className="min-h-screen bg-black text-white pt-24 px-6 md:px-12 pb-16">
       <div className="max-w-6xl mx-auto">

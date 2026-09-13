@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Resident {
+  id          String   @id
+  name        String
+  showName    String
+  genres      String   // Stored as JSON string array
+  avatarUrl   String
+  bio         String
+  mixcloudUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  scheduleSlots ScheduleSlot[]
+}
+
+model ScheduleSlot {
+  id        String   @id @default(uuid())
+  day       String   // e.g. "Monday", "TBA"
+  slot      String   // e.g. "20:00 - 22:00"
+  channel   String   // e.g. "DIVINE:ONE"
+  isLive    Boolean  @default(true)
+  
+  // Foreign Key
+  residentId String
+  resident   Resident @relation(fields: [residentId], references: [id], onDelete: Cascade)
+}
+
+model ArchiveShow {
+  id          String   @id
+  title       String
+  dj          String
+  genre       String
+  date        String
+  duration    String
+  channel     String
+  avatarUrl   String
+  mixcloudUrl String
+  listenCount Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model MerchItem {
+  id          String   @id
+  name        String
+  price       Float
+  category    String
+  description String
+  tag         String?
+  createdAt   DateTime @default(now())
+}

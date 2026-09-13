@@ -85,11 +85,35 @@ export default function LoginPage() {
           </button>
         </form>
         
-        <div className="mt-6 text-center text-xs text-white/30">
-          <p>Mockup Credentials:</p>
-          <p>Admin: admin / admin</p>
-          <p>DJ: dj / dj</p>
-        </div>
+        {process.env.NODE_ENV !== "production" && (
+          <div className="mt-8 pt-6 border-t border-white/5 text-center">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-white/40 mb-3">
+              Dev Mode Quick Fill:
+            </p>
+            <div className="flex gap-2 justify-center">
+              <button
+                type="button"
+                onClick={() => {
+                  setUsername("admin");
+                  setPassword("divine2026!");
+                }}
+                className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 transition-colors"
+              >
+                Fill Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setUsername("dj");
+                  setPassword("divine-dj-2026!");
+                }}
+                className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-lg bg-brand-gold/10 hover:bg-brand-gold/20 text-brand-gold border border-brand-gold/30 transition-colors"
+              >
+                Fill DJ
+              </button>
+            </div>
+          </div>
+        )}
       </motion.div>
     </div>
   );

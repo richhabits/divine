@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { schedule } from "@/lib/schedule-data";
+import { getScheduleSlots } from "@/app/actions/schedule-actions";
 import { DayOfWeek, Channel } from "@/lib/types";
 
 const VALID_DAYS: DayOfWeek[] = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const dayParam = searchParams.get("day")?.toUpperCase() as DayOfWeek | undefined;
   const channelParam = searchParams.get("channel")?.toUpperCase() as Channel | undefined;
 
-  let filtered = [...schedule];
+  let filtered = await getScheduleSlots();
 
   // Filter by day
   if (dayParam) {
@@ -41,7 +41,9 @@ export async function GET(request: NextRequest) {
   };
 
   filtered.sort((a, b) => {
-    const dayDiff = dayOrder[a.day] - dayOrder[b.day];
+    const aOrder = dayOrder[a.day as DayOfWeek] ?? 99;
+    const bOrder = dayOrder[b.day as DayOfWeek] ?? 99;
+    const dayDiff = aOrder - bOrder;
     if (dayDiff !== 0) return dayDiff;
     return a.startTime.localeCompare(b.startTime);
   });

@@ -81,6 +81,7 @@ export interface MerchItem {
   description: string;
   tag?: string;
   colors?: string[];
+  imageUrl?: string;
 }
 
 // ─── Archive / Listen Back Show ────────────────────────────────────

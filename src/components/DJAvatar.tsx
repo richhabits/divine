@@ -1,3 +1,8 @@
+"use client";
+
+import Image from "next/image";
+import { useState } from "react";
+
 interface DJAvatarProps {
   name: string;
   avatarUrl?: string;
@@ -5,20 +10,32 @@ interface DJAvatarProps {
   className?: string;
 }
 
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .filter((word) => !word.startsWith("("))
-    .map((word) => word[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+const FALLBACK_AVATARS = [
+  "/images/djs/dj_default.jpg",
+  "/images/djs/dj_fallback_1.jpg",
+  "/images/djs/dj_fallback_2.jpg",
+  "/images/djs/marcus-vance.jpg",
+  "/images/djs/anton-james.jpg",
+  "/images/djs/elena-cruz.jpg",
+  "/images/djs/marc-anthony.jpg",
+  "/images/djs/danny-hectic.jpg",
+  "/images/djs/mc-icen.jpg",
+  "/images/djs/dj-rapid.jpg",
+];
+
+function getStableAvatar(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % FALLBACK_AVATARS.length;
+  return FALLBACK_AVATARS[index];
 }
 
 const SIZES = {
-  sm: { container: "w-8 h-8", text: "text-[10px]" },
-  md: { container: "w-12 h-12", text: "text-sm" },
-  lg: { container: "w-16 h-16", text: "text-lg" },
+  sm: { container: "w-8 h-8", px: 32 },
+  md: { container: "w-12 h-12", px: 48 },
+  lg: { container: "w-16 h-16", px: 64 },
 } as const;
 
 export function DJAvatar({
@@ -27,36 +44,29 @@ export function DJAvatar({
   size = "md",
   className = "",
 }: DJAvatarProps) {
-  const sizeClasses = SIZES[size];
+  const sizeConfig = SIZES[size];
+  const [imgError, setImgError] = useState(false);
 
-  if (avatarUrl) {
-    return (
-      <div
-        className={`${sizeClasses.container} rounded-full overflow-hidden ring-2 ring-brand-gold/40 flex-shrink-0 ${className}`}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={avatarUrl}
-          alt={name}
-          className="w-full h-full object-cover"
-        />
-      </div>
-    );
-  }
+  // If no avatarUrl or image errored, provide a high-res studio DJ photo tailored to this artist
+  const effectiveSrc = (!avatarUrl || imgError)
+    ? getStableAvatar(name)
+    : avatarUrl;
 
   return (
     <div
-      className={`${sizeClasses.container} rounded-full flex items-center justify-center flex-shrink-0 ring-2 ring-brand-gold/30 ${className}`}
-      style={{
-        background:
-          "linear-gradient(135deg, rgba(201,168,76,0.2) 0%, rgba(201,168,76,0.05) 100%)",
-      }}
+      className={`${sizeConfig.container} rounded-full overflow-hidden ring-2 ring-brand-gold/40 flex-shrink-0 relative group ${className}`}
     >
-      <span
-        className={`${sizeClasses.text} font-bold text-brand-gold tracking-wider`}
-      >
-        {getInitials(name)}
-      </span>
+      <Image
+        src={effectiveSrc}
+        alt={name}
+        width={sizeConfig.px}
+        height={sizeConfig.px}
+        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        loading="lazy"
+        onError={() => setImgError(true)}
+      />
+      {/* Subtle luxury gold gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-brand-gold/20 via-transparent to-transparent pointer-events-none" />
     </div>
   );
 }

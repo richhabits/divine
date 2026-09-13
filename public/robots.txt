@@ -1,0 +1,35 @@
+# ==============================================================================
+# DIVINE RADIO LONDON — BROADCAST NETWORK
+# Intellectual Property & Broadcast Assets Protected by HECTIC
+# ==============================================================================
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /dj/
+Disallow: /api/
+
+# Block automated scrapers and content leechers
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+# Sitemap
+Sitemap: https://divineradiolondon.com/sitemap.xml
