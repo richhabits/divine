@@ -6,7 +6,7 @@ import Link from "next/link";
 
 export default function DJUploadPage() {
   const [dragActive, setDragActive] = useState(false);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<string | null>(null);
   const [showName, setShowName] = useState("");
   const [scheduledSlot, setScheduledSlot] = useState("");
   const [isUploading, setIsUploading] = useState(false);
@@ -101,55 +101,24 @@ export default function DJUploadPage() {
                 </select>
               </div>
 
-              {/* Drag & Drop Area */}
+              {/* Link Input Area */}
               <div>
                 <label className="block text-xs font-bold uppercase tracking-wider text-white/70 mb-2">
-                  Audio File (MP3 / WAV / FLAC, max 500MB)
+                  WeTransfer / Dropbox Link
                 </label>
-                <div
-                  onDragOver={(e) => {
-                    e.preventDefault();
-                    setDragActive(true);
-                  }}
-                  onDragLeave={() => setDragActive(false)}
-                  onDrop={(e) => {
-                    e.preventDefault();
-                    setDragActive(false);
-                    if (e.dataTransfer.files?.[0]) setFile(e.dataTransfer.files[0]);
-                  }}
-                  className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${
-                    dragActive
-                      ? "border-brand-gold bg-brand-gold/10"
-                      : "border-white/15 hover:border-white/30 bg-white/[0.02]"
-                  }`}
-                  onClick={() => document.getElementById("audio-file-input")?.click()}
-                >
+                <div className="relative">
+                  <Upload className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/30" />
                   <input
-                    id="audio-file-input"
-                    type="file"
-                    accept="audio/*"
-                    className="hidden"
-                    onChange={(e) => e.target.files?.[0] && setFile(e.target.files[0])}
+                    type="url"
+                    required
+                    onChange={(e) => setFile(e.target.value as any)}
+                    placeholder="https://we.tl/t-xxxxxxxxx"
+                    className="w-full bg-white/5 border border-white/10 focus:border-brand-gold rounded-xl pl-12 pr-4 py-3 text-white placeholder-white/30 text-sm outline-none transition-all"
                   />
-                  <Music className="w-10 h-10 text-brand-gold mx-auto mb-3" />
-                  {file ? (
-                    <div>
-                      <p className="text-white font-bold text-sm">{file.name}</p>
-                      <p className="text-white/40 text-xs mt-1">
-                        {(file.size / (1024 * 1024)).toFixed(1)} MB &bull; Ready to process
-                      </p>
-                    </div>
-                  ) : (
-                    <div>
-                      <p className="text-white font-bold text-sm mb-1">
-                        Drag &amp; drop your mix file here, or browse
-                      </p>
-                      <p className="text-white/40 text-xs">
-                        Bitrate minimum: 192kbps (320kbps MP3 recommended)
-                      </p>
-                    </div>
-                  )}
                 </div>
+                <p className="text-white/40 text-[10px] mt-2">
+                  Paste a link to your 320kbps MP3 or WAV file. Ensure the link does not expire before your broadcast slot.
+                </p>
               </div>
 
               <div className="flex items-start gap-3 p-4 rounded-xl bg-white/5 border border-white/5 text-xs text-white/50">

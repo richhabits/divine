@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Menu, X, Radio, LogIn } from "lucide-react";
+import { Menu, X, LogIn } from "lucide-react";
 import { Channel } from "@/lib/types";
 
 interface NavLink {

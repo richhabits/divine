@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock, Music } from "lucide-react";
-import { DayOfWeek } from "@/lib/types";
+import { DayOfWeek, DJSlot } from "@/lib/types";
 import { DJAvatar } from "./DJAvatar";
 import { getScheduleSlots } from "@/app/actions/schedule-actions";
 import { schedule as defaultSchedule } from "@/lib/schedule-data";
@@ -24,7 +24,7 @@ function getCurrentDay(): DayOfWeek {
   return map[jsDay];
 }
 
-function SlotCard({ slot, index }: { slot: any; index: number }) {
+function SlotCard({ slot, index }: { slot: DJSlot; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -83,11 +83,10 @@ function SlotCard({ slot, index }: { slot: any; index: number }) {
 
 export function ScheduleGrid() {
   const [activeDay, setActiveDay] = useState<DayOfWeek>(getCurrentDay());
-  const [schedule, setSchedule] = useState<any[]>(defaultSchedule);
+  const [schedule, setSchedule] = useState<DJSlot[]>(defaultSchedule);
 
   // Update active day on mount (client-side only) and pull DB updates if any
   useEffect(() => {
-    setActiveDay(getCurrentDay());
     getScheduleSlots().then((slots) => {
       if (slots && slots.length > 0) setSchedule(slots);
     });
@@ -98,7 +97,7 @@ export function ScheduleGrid() {
       schedule
         .filter((slot) => slot.day === activeDay)
         .sort((a, b) => a.startTime.localeCompare(b.startTime)),
-    [activeDay]
+    [activeDay, schedule]
   );
 
   return (

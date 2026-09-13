@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mic2, Radio, Users, Activity, Settings, PlayCircle, Upload } from "lucide-react";
 import { STATION_INFO } from "@/lib/schedule-data";
 import Link from "next/link";
+import { LiveShoutoutFeed } from "@/components/LiveShoutoutFeed";
 
 export default function DJDashboard() {
   return (
@@ -74,28 +75,36 @@ export default function DJDashboard() {
           </Link>
         </div>
 
-        {/* Current Schedule Info */}
-        <div className="glass-panel p-8 rounded-2xl border border-white/5">
-          <div className="flex items-center gap-3 mb-8">
-            <Radio className="w-5 h-5 text-white/50" />
-            <h2 className="text-xl font-black">Upcoming Slots</h2>
-          </div>
-          
-          <div className="space-y-4">
-            {[
-              { day: "Today", time: "20:00 - 22:00", type: "Live Broadcast" },
-              { day: "Next Friday", time: "18:00 - 20:00", type: "Pre-recorded (Auto)" }
-            ].map((slot, i) => (
-              <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
-                <div>
-                  <span className="block text-sm font-bold text-brand-gold mb-1">{slot.day}</span>
-                  <span className="block text-xs text-white/50">{slot.time}</span>
+        {/* Bottom Section: Feed and Schedule */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Current Schedule Info */}
+          <div className="glass-panel p-8 rounded-2xl border border-white/5 h-full">
+            <div className="flex items-center gap-3 mb-8">
+              <Radio className="w-5 h-5 text-white/50" />
+              <h2 className="text-xl font-black">Upcoming Slots</h2>
+            </div>
+            
+            <div className="space-y-4">
+              {[
+                { day: "Today", time: "20:00 - 22:00", type: "Live Broadcast" },
+                { day: "Next Friday", time: "18:00 - 20:00", type: "Pre-recorded (Auto)" }
+              ].map((slot, i) => (
+                <div key={i} className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div>
+                    <span className="block text-sm font-bold text-brand-gold mb-1">{slot.day}</span>
+                    <span className="block text-xs text-white/50">{slot.time}</span>
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-white/10 text-[9px] font-bold tracking-[0.2em] uppercase text-white/70">
+                    {slot.type}
+                  </span>
                 </div>
-                <span className="px-3 py-1 rounded-full bg-white/10 text-[9px] font-bold tracking-[0.2em] uppercase text-white/70">
-                  {slot.type}
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Live Shoutout Feed */}
+          <div className="h-[400px] md:h-auto">
+            <LiveShoutoutFeed />
           </div>
         </div>
 

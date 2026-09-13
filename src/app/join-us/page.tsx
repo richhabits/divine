@@ -42,8 +42,12 @@ export default function JoinUsPage() {
   };
 
   const handleSubmit = async () => {
-    // In production, this would POST to /api/applications
-    console.log("DJ Application Submitted:", formData);
+    // Generate WhatsApp Message
+    const msg = `*NEW DJ APPLICATION*%0A%0A*Name/Alias:* ${formData.name || "N/A"}%0A*Real Name:* ${formData.realName || "N/A"}%0A*Email:* ${formData.email || "N/A"}%0A*Phone:* ${formData.phone || "N/A"}%0A*Genres:* ${formData.genres || "N/A"}%0A*Experience:* ${formData.experience || "N/A"}%0A*Mixcloud/Link:* ${formData.mixcloud || "N/A"}%0A*Availability:* ${formData.availability || "N/A"}`;
+    
+    // Open WhatsApp
+    window.open(`https://wa.me/447597611013?text=${msg}`, "_blank");
+    
     setIsSubmitted(true);
   };
 

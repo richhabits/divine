@@ -34,6 +34,7 @@ import {
   Speaker,
   Mic,
 } from "lucide-react";
+import AdvertisingPricing from "../components/AdvertisingPricing";
 
 const NOW_PLAYING: NowPlaying = {
   dj: "DJ Fivestack",
@@ -581,90 +582,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Ad Packages */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                tier: "Starter",
-                price: "Contact Us",
-                features: [
-                  "Pre-recorded audio spots",
-                  "Social media mentions",
-                  "Website banner placement",
-                  "Monthly analytics report",
-                ],
-                highlight: false,
-              },
-              {
-                tier: "Premium",
-                price: "Contact Us",
-                features: [
-                  "Everything in Starter",
-                  "Live DJ read-outs during shows",
-                  "Branded show sponsorship",
-                  "Event partnership opportunities",
-                  "Priority ad rotation",
-                ],
-                highlight: true,
-              },
-              {
-                tier: "Enterprise",
-                price: "Contact Us",
-                features: [
-                  "Everything in Premium",
-                  "Exclusive channel sponsorship",
-                  "Custom branded content",
-                  "Dedicated account manager",
-                  "Cross-platform campaign",
-                ],
-                highlight: false,
-              },
-            ].map((pkg, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15 }}
-                className={`p-8 rounded-2xl border transition-all ${
-                  pkg.highlight
-                    ? "bg-brand-gold/10 border-brand-gold/40 shadow-[0_0_40px_rgba(201,168,76,0.1)]"
-                    : "glass-panel border-white/5"
-                }`}
-              >
-                {pkg.highlight && (
-                  <span className="inline-block px-3 py-1 bg-brand-gold text-black text-[9px] font-bold tracking-[0.2em] uppercase rounded-full mb-4">
-                    Most Popular
-                  </span>
-                )}
-                <h3 className="text-2xl font-black mb-2">{pkg.tier}</h3>
-                <p className="text-brand-gold font-bold text-lg mb-6">
-                  {pkg.price}
-                </p>
-                <ul className="space-y-3 mb-8">
-                  {pkg.features.map((f) => (
-                    <li
-                      key={f}
-                      className="flex items-start gap-3 text-sm text-white/60"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-gold mt-1.5 shrink-0" />
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="mailto:info@divineradiolondon.com?subject=Advertising%20Enquiry"
-                  className={`block w-full py-3 rounded-xl text-center text-[11px] font-black tracking-[0.2em] uppercase transition-all ${
-                    pkg.highlight
-                      ? "bg-brand-gold text-black hover:bg-[#E8D48B]"
-                      : "bg-white/5 text-white border border-white/10 hover:border-brand-gold/40"
-                  }`}
-                >
-                  Get In Touch
-                </a>
-              </motion.div>
-            ))}
-          </div>
+          <AdvertisingPricing />
         </div>
       </section>
 

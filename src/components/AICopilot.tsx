@@ -52,7 +52,8 @@ export function AICopilot() {
     const routeHints = ROUTE_KNOWLEDGE[pathname] || ROUTE_KNOWLEDGE["/"];
     const welcomeMsg = routeHints[0] || "How can I help you on this page?";
 
-    setMessages([
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+setMessages([
       {
         id: Date.now().toString(),
         sender: "ai",

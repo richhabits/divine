@@ -1,0 +1,50 @@
+{
+  "packages": [
+    {
+      "tier": "Starter",
+      "price": "£250",
+      "features": [
+        "2 × 30‑sec radio spots on regional FM",
+        "1 × banner ad on DIVINE website (30‑day rotation)",
+        "Extra 1 × social post (optional)"
+      ]
+    },
+    {
+      "tier": "Growth",
+      "price": "£650",
+      "features": [
+        "4 × 30‑sec radio spots (2 regional + 2 digital)",
+        "2 × banner ads (different pages)",
+        "1 × social carousel (3‑panel)",
+        "Creative copywriting service (optional)",
+        "Dedicated campaign analytics report (optional)"
+      ]
+    },
+    {
+      "tier": "Premium",
+      "price": "£1,350",
+      "features": [
+        "8 × 30‑sec radio spots (4 regional, 4 digital)",
+        "4 × banner ads (prime placements)",
+        "2 × social video reels (≤ 15 s)",
+        "1 × email newsletter feature",
+        "Audience‑targeted geo‑fencing (optional)",
+        "Custom landing page development (optional)"
+      ]
+    },
+    {
+      "tier": "Enterprise",
+      "price": "Custom (starting at £2,500)",
+      "features": [
+        "Unlimited radio spots across national & regional stations",
+        "Unlimited digital banner rotations",
+        "Full‑suite social & video content (up to 6 pieces)",
+        "Quarterly branded podcast episode",
+        "Dedicated account manager & performance dashboard",
+        "Full‑service creative production (optional)",
+        "Advanced attribution (UTM + QR code) (optional)",
+        "Cross‑platform retargeting (optional)"
+      ]
+    }
+  ]
+}

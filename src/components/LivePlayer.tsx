@@ -24,6 +24,27 @@ export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioContextInitialized = useRef(false);
 
+  // Toggle play/pause for the live stream — defined before useEffects that depend on it
+  const handleTogglePlay = useCallback(() => {
+    setIsPlaying(prev => !prev);
+  }, []);
+
+  const handleMute = useCallback(() => {
+    if (isMuted) {
+      setVolume(prevVolume);
+      setIsMuted(false);
+    } else {
+      setPrevVolume(volume);
+      setVolume(0);
+      setIsMuted(true);
+    }
+  }, [isMuted, volume, prevVolume]);
+
+  const handleVolumeChange = useCallback((newVolume: number) => {
+    setVolume(newVolume);
+    setIsMuted(newVolume === 0);
+  }, []);
+
   // Poll /api/now-playing every 15 seconds for real metadata
   useEffect(() => {
     let active = true;
@@ -52,6 +73,7 @@ export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
     };
   }, []);
 
+  // Sync play/pause state to the audio element + Media Session API
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -77,6 +99,7 @@ export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
     }
   }, [isPlaying, liveTrack, liveArtist, initialNowPlaying, handleTogglePlay]);
 
+  // Sync volume/mute
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -84,8 +107,9 @@ export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
     }
   }, [volume, isMuted]);
 
-  const handleTogglePlay = useCallback(() => {
-    if (!audioContextInitialized.current && audioRef.current) {
+  // Initialise Web Audio API analyser for EQ visualiser
+  useEffect(() => {
+    if (!audioContextInitialized.current && audioRef.current && isPlaying) {
       try {
         const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
         const audioCtx = new AudioContext();
@@ -102,25 +126,7 @@ export function LivePlayer({ nowPlaying: initialNowPlaying }: LivePlayerProps) {
         console.error("Web Audio API not supported or blocked by CORS:", err);
       }
     }
-
-    setIsPlaying((prev) => !prev);
-  }, []);
-
-  const handleMute = useCallback(() => {
-    if (isMuted) {
-      setVolume(prevVolume);
-      setIsMuted(false);
-    } else {
-      setPrevVolume(volume);
-      setVolume(0);
-      setIsMuted(true);
-    }
-  }, [isMuted, volume, prevVolume]);
-
-  const handleVolumeChange = useCallback((newVolume: number) => {
-    setVolume(newVolume);
-    setIsMuted(newVolume === 0);
-  }, []);
+  }, [isPlaying]);
 
   const VolumeIcon =
     isMuted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2;
