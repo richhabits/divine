@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   },
   description:
     "DIVINE — London's premier DAB digital broadcast network. The higher state of audio. Soulful house, garage, jungle, D&B, Afrobeats, and ambient — 24/7.",
-  manifest: "/manifest.ts",
+  manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     locale: "en_GB",

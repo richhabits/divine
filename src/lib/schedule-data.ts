@@ -255,7 +255,7 @@ export const RESIDENTS: Resident[] = [
     name: "DIONYSUS",
     showName: "DIONYSUS Show",
     genres: ["House"],
-    avatarUrl: "/images/default-avatar.png",
+    avatarUrl: "/images/default-avatar.jpg",
     slot: "TBA",
     day: "TBA",
     channel: "DIVINE:ONE",

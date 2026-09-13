@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  compress: true,
   async headers() {
     return [
       {
@@ -29,6 +30,18 @@ const nextConfig: NextConfig = {
           { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
           { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
           { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+        ],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/:path*.woff2",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
         ],
       },
     ];

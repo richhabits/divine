@@ -29,14 +29,13 @@ export default function TVPage() {
           </p>
         </motion.div>
 
-        {/* Video Player Mockup */}
+        {/* Live Stream Player */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="aspect-video w-full rounded-2xl overflow-hidden border border-white/10 glass-panel shadow-2xl relative bg-zinc-900"
         >
-          {/* YouTube Embed Placeholder */}
           <iframe
             className="w-full h-full absolute inset-0"
             src="https://www.youtube.com/embed/5qap5aO4i9A?autoplay=1&mute=1&loop=1&playlist=5qap5aO4i9A"

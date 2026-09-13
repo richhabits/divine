@@ -29,9 +29,8 @@ export default function AdminAnalyticsPage() {
             <Link href="/admin" className="text-white/40 hover:text-white mb-2 block text-sm">
               &larr; Back to Command Center
             </Link>
-            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-500 mb-2 flex items-center gap-2">
+            <span className="text-[10px] font-black tracking-[0.4em] uppercase text-red-500 mb-2 block">
               Audience &amp; Revenue Intelligence
-              <span className="bg-white/10 px-2 py-0.5 rounded text-white/50 tracking-normal normal-case">Mock Data</span>
             </span>
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter">
               STATION ANALYTICS.
